@@ -8,14 +8,19 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import br.com.usp.willianerodrigues.course.CourseApplication;
 import br.com.usp.willianerodrigues.course.R;
 
 public class SplashActivity extends AppCompatActivity {
+
+    private CourseApplication application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spalsh);
+
+        application = (CourseApplication) getApplicationContext();
 
         hideNavigationBar();
 
@@ -38,7 +43,7 @@ public class SplashActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... voids) {
             try {
                 Thread.sleep(TIME);
-                return true;
+                return application.buscarUserActive() != null;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -48,9 +53,16 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean sucess) {
 
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            if (sucess) {
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent = new Intent(SplashActivity.this, SlideActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
         }
     }
 
